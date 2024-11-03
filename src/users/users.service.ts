@@ -1,9 +1,9 @@
 import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
 import { User } from "./user.model";
 import { InjectModel } from "@nestjs/sequelize";
-import { CreateUserDTO } from "./dto/createUser.dto";
 import { RolesService } from "src/roles/roles.service";
 import { AddRoleDTO } from "./dto/add.role.dto";
+import { CreateUserDTO } from "./dto/create.user.dto";
 
 @Injectable()
 export class UsersService {

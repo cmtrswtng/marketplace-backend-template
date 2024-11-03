@@ -12,6 +12,8 @@ import { RolesModule } from "./roles/roles.module";
 import { Role } from "./roles/roles.model";
 import { UserRoles } from "./roles/user.roles.model";
 import { AuthModule } from './auth/auth.module';
+import { CategoryModule } from './category/category.module';
+import { CategoriesModule } from './categories/categories.module';
 
 @Module({
   controllers: [ReviewsController],
@@ -35,6 +37,8 @@ import { AuthModule } from './auth/auth.module';
     ReviewsModule,
     RolesModule,
     AuthModule,
+    CategoryModule,
+    CategoriesModule,
   ],
 })
 export class AppModule {}

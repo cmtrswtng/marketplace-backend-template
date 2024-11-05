@@ -1,4 +1,14 @@
-import { Column, DataType, Table, Model } from "sequelize-typescript";
+import { ApiProperty } from "@nestjs/swagger";
+import {
+  Column,
+  DataType,
+  Table,
+  Model,
+  BelongsTo,
+  ForeignKey,
+} from "sequelize-typescript";
+import { Item } from "src/items/items.model";
+import { User } from "src/users/user.model";
 
 interface ReviewCreationAttr {
   phone: string;
@@ -28,21 +38,32 @@ export class Review extends Model<Review, ReviewCreationAttr> {
   })
   description: string;
 
+  @ForeignKey(() => Item)
   @Column({
     type: DataType.INTEGER,
-    // references: "cartIds",
   })
   itemId: number;
 
+  @BelongsTo(() => Item)
+  item: Item;
+
+  @ForeignKey(() => User)
   @Column({
     type: DataType.INTEGER,
-    // references: "favouriteListIds",
   })
-  favouriteListId: number;
+  userId: number;
 
-  @Column({
-    type: DataType.TEXT,
-    // references: "orderListIds",
+  @BelongsTo(() => User)
+  user: User;
+
+  @ApiProperty({
+    example: ["static/photo1.jpg", "static/photo2.jpg"],
+    description: "Фотографии отызва",
+    type: [String],
   })
-  photos: string;
+  @Column({
+    type: DataType.ARRAY(DataType.TEXT),
+    allowNull: true,
+  })
+  photos: string[];
 }

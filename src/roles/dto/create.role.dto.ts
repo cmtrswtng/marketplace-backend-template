@@ -1,8 +1,9 @@
 import { IsString } from "class-validator";
+import { isStringMessage } from "src/constants/messages";
 
 export class CreateRoleDTO {
-  @IsString({ message: "Должно быть строкой" })
+  @IsString(isStringMessage)
   readonly value: string;
-  @IsString({ message: "Должно быть строкой" })
+  @IsString(isStringMessage)
   readonly description: string;
 }

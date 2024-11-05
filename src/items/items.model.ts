@@ -1,13 +1,30 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { Column, DataType, Table, Model } from "sequelize-typescript";
+import {
+  Column,
+  DataType,
+  Table,
+  Model,
+  BelongsTo,
+  ForeignKey,
+  HasMany,
+} from "sequelize-typescript";
+import { Category } from "src/categories/categories.model";
+import { Review } from "src/reviews/reviews.model";
 
-interface ItemCreationAttr {
-  phone: string;
-  password: string;
+interface ItemCreationAttrs {
+  article: string;
+
+  description: string;
+
+  price: number;
+
+  photos: string[];
+
+  categoryId: number;
 }
 
 @Table({ tableName: "items" })
-export class Item extends Model<Item, ItemCreationAttr> {
+export class Item extends Model<Item, ItemCreationAttrs> {
   @ApiProperty({
     example: 1567,
     description: "ID товара",
@@ -69,16 +86,23 @@ export class Item extends Model<Item, ItemCreationAttr> {
   salePrice: number;
 
   @ApiProperty({
-    example: "static/photo.jpg",
-    description: "Фото товара",
+    example: ["static/photo1.jpg", "static/photo2.jpg"],
+    description: "Фотографии товара",
+    type: [String],
   })
   @Column({
-    type: DataType.TEXT,
+    type: DataType.ARRAY(DataType.TEXT),
+    allowNull: true,
   })
-  photos: string;
+  photos: string[];
 
-  @Column({
-    type: DataType.INTEGER,
-  })
-  reviews: number;
+  @HasMany(() => Review)
+  reviews: Review[];
+
+  @ForeignKey(() => Category)
+  @Column({ type: DataType.INTEGER })
+  categoryID: number;
+
+  @BelongsTo(() => Category)
+  category: Category;
 }

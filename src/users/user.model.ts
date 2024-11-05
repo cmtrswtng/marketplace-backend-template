@@ -5,7 +5,9 @@ import {
   Table,
   Model,
   BelongsToMany,
+  HasMany,
 } from "sequelize-typescript";
+import { Review } from "src/reviews/reviews.model";
 import { Role } from "src/roles/roles.model";
 import { UserRoles } from "src/roles/user.roles.model";
 
@@ -46,14 +48,12 @@ export class User extends Model<User, UserCreationAttrs> {
   @ApiProperty({ example: 178235, description: "ID корзины" })
   @Column({
     type: DataType.INTEGER,
-    // references: "cartIds",
   })
   cartId: number;
 
   @ApiProperty({ example: 178235, description: "ID списка избранного" })
   @Column({
     type: DataType.INTEGER,
-    // references: "favouriteListIds",
   })
   favouriteListId: number;
 
@@ -63,10 +63,12 @@ export class User extends Model<User, UserCreationAttrs> {
   })
   @Column({
     type: DataType.INTEGER,
-    // references: "orderListIds",
   })
   orderListId: number;
 
   @BelongsToMany(() => Role, () => UserRoles)
   roles: Role[];
+
+  @HasMany(() => Review)
+  reviews: Review[];
 }

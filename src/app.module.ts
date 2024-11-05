@@ -11,16 +11,22 @@ import { ReviewsModule } from "./reviews/reviews.module";
 import { RolesModule } from "./roles/roles.module";
 import { Role } from "./roles/roles.model";
 import { UserRoles } from "./roles/user.roles.model";
-import { AuthModule } from './auth/auth.module';
-import { CategoryModule } from './category/category.module';
-import { CategoriesModule } from './categories/categories.module';
-
+import { AuthModule } from "./auth/auth.module";
+import { CategoriesModule } from "./categories/categories.module";
+import { Category } from "./categories/categories.model";
+import { Review } from "./reviews/reviews.model";
+import { ImagesModule } from "./images/images.module";
+import { ServeStaticModule } from "@nestjs/serve-static";
+import * as path from "path";
 @Module({
   controllers: [ReviewsController],
   providers: [ReviewsService],
   imports: [
     ConfigModule.forRoot({
       envFilePath: ".env",
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: path.resolve(__dirname, "static"),
     }),
     SequelizeModule.forRoot({
       dialect: "postgres",
@@ -30,15 +36,15 @@ import { CategoriesModule } from './categories/categories.module';
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
       autoLoadModels: true,
-      models: [User, Role, UserRoles, Item],
+      models: [User, Role, UserRoles, Item, Category, Review],
     }),
     UsersModule,
     ItemsModule,
     ReviewsModule,
     RolesModule,
     AuthModule,
-    CategoryModule,
     CategoriesModule,
+    ImagesModule,
   ],
 })
 export class AppModule {}

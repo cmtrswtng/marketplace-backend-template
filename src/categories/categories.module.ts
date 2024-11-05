@@ -9,5 +9,6 @@ import { Item } from "src/items/items.model";
   controllers: [CategoriesController],
   providers: [CategoriesService],
   imports: [SequelizeModule.forFeature([Category, Item])],
+  exports: [CategoriesService],
 })
 export class CategoriesModule {}

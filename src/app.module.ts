@@ -19,11 +19,9 @@ import { ImagesModule } from "./images/images.module";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import * as path from "path";
 @Module({
-  controllers: [ReviewsController],
-  providers: [ReviewsService],
   imports: [
     ConfigModule.forRoot({
-      envFilePath: ".env",
+      envFilePath: `.${process.env.NODE_ENV}.env`,
     }),
     ServeStaticModule.forRoot({
       rootPath: path.resolve(__dirname, "static"),
@@ -36,6 +34,8 @@ import * as path from "path";
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
       autoLoadModels: true,
+      synchronize: false,
+      sync: { alter: process.env.NODE_ENV === "development" },
       models: [User, Role, UserRoles, Item, Category, Review],
     }),
     UsersModule,

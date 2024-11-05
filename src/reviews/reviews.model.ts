@@ -11,8 +11,11 @@ import { Item } from "src/items/items.model";
 import { User } from "src/users/user.model";
 
 interface ReviewCreationAttr {
-  phone: string;
-  password: string;
+  description: string;
+  photos: string[];
+  rating: number;
+  userId: number;
+  itemId: number;
 }
 
 @Table({ tableName: "reviews" })
@@ -57,12 +60,12 @@ export class Review extends Model<Review, ReviewCreationAttr> {
   user: User;
 
   @ApiProperty({
-    example: ["static/photo1.jpg", "static/photo2.jpg"],
-    description: "Фотографии отызва",
+    example: ["photo1.jpg", "photo2.jpg"],
+    description: "Список путей к фотографиям товара",
     type: [String],
   })
   @Column({
-    type: DataType.ARRAY(DataType.TEXT),
+    type: DataType.ARRAY(DataType.STRING),
     allowNull: true,
   })
   photos: string[];

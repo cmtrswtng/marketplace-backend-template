@@ -1,18 +1,14 @@
 import { IsNumber, IsString } from "class-validator";
 import { isNumberMessage, isStringMessage } from "src/constants/messages";
 
-export class CreateItemDTO {
-  @IsString(isStringMessage)
-  readonly article: string;
-
+export class CreateReviewDTO {
   @IsString(isStringMessage)
   readonly description: string;
-
+  readonly photos?: [];
   @IsNumber({}, isNumberMessage)
-  readonly price: number;
-
+  readonly rating: number;
   @IsNumber({}, isNumberMessage)
-  readonly categoryId: number;
-
-  readonly photos: [];
+  readonly userId: number;
+  @IsNumber({}, isNumberMessage)
+  readonly itemId: number;
 }

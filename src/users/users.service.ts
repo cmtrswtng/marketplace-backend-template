@@ -1,9 +1,17 @@
-import { HttpException, HttpStatus, Injectable } from "@nestjs/common";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from "@nestjs/common";
 import { User } from "./user.model";
 import { InjectModel } from "@nestjs/sequelize";
 import { RolesService } from "src/roles/roles.service";
 import { AddRoleDTO } from "./dto/add.role.dto";
 import { CreateUserDTO } from "./dto/create.user.dto";
+import {
+  alreadyExistMessage,
+  doesNotExistMessage,
+} from "src/constants/messages";
 
 @Injectable()
 export class UsersService {
@@ -13,6 +21,13 @@ export class UsersService {
   ) {}
 
   async createUser(dto: CreateUserDTO) {
+    const userExist = await this.userRepository.findOne({
+      where: { phone: dto.phone },
+    });
+    if (userExist) {
+      throw new BadRequestException(alreadyExistMessage("Пользователь"));
+    }
+
     const user = await this.userRepository.create(dto);
     const role = await this.roleService.getRoleByValue("USER");
     await user.$set("roles", [role.id]);
@@ -21,16 +36,24 @@ export class UsersService {
   }
 
   async getAllUsers() {
-    const users = await this.userRepository.findAll({ include: { all: true } });
-    return users;
+    return await this.userRepository.findAll({ include: { all: true } });
+  }
+
+  async getUser(id: number) {
+    return await this.userRepository.findByPk(id, {
+      attributes: { exclude: ["password"] },
+    });
   }
 
   async getUserByPhone(phone: string) {
-    const user = await this.userRepository.findOne({
+    return await this.userRepository.findOne({
       where: { phone },
       include: { all: true },
     });
-    return user;
+  }
+
+  async getUserByPK(id: number) {
+    return await this.userRepository.findByPk(id);
   }
 
   async addRole(dto: AddRoleDTO) {
@@ -40,9 +63,6 @@ export class UsersService {
       await user.$add("role", role.id);
       return dto;
     }
-    throw new HttpException(
-      "Пользователь или роль не были найдены",
-      HttpStatus.NOT_FOUND
-    );
+    throw new NotFoundException(doesNotExistMessage("Пользователя или роли"));
   }
 }

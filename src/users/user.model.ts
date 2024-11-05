@@ -7,6 +7,7 @@ import {
   BelongsToMany,
   HasMany,
 } from "sequelize-typescript";
+import { Item } from "src/items/items.model";
 import { Review } from "src/reviews/reviews.model";
 import { Role } from "src/roles/roles.model";
 import { UserRoles } from "src/roles/user.roles.model";
@@ -45,30 +46,37 @@ export class User extends Model<User, UserCreationAttrs> {
   })
   password: string;
 
-  @ApiProperty({ example: 178235, description: "ID корзины" })
-  @Column({
-    type: DataType.INTEGER,
-  })
-  cartId: number;
-
-  @ApiProperty({ example: 178235, description: "ID списка избранного" })
-  @Column({
-    type: DataType.INTEGER,
-  })
-  favouriteListId: number;
-
+  @HasMany(() => Review)
   @ApiProperty({
-    example: 178235,
-    description: "ID списка заказов",
+    description: "Отзывы пользователя",
+    type: () => [Review],
   })
-  @Column({
-    type: DataType.INTEGER,
-  })
-  orderListId: number;
+  reviews: Review[];
 
   @BelongsToMany(() => Role, () => UserRoles)
+  @ApiProperty({
+    description: "Роли пользователя",
+    type: () => [Role],
+  })
   roles: Role[];
 
-  @HasMany(() => Review)
-  reviews: Review[];
+  @ApiProperty({
+    description: "Корзина пользователя с товарами",
+    type: () => [Item],
+  })
+  @Column({
+    type: DataType.ARRAY(DataType.JSON),
+    allowNull: true,
+  })
+  cart: Item[];
+
+  @ApiProperty({
+    description: "Избранные товары пользователя",
+    type: () => [Item],
+  })
+  @Column({
+    type: DataType.ARRAY(DataType.JSON),
+    allowNull: true,
+  })
+  favorites: Item[];
 }

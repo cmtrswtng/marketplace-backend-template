@@ -21,4 +21,11 @@ export class ImagesService {
       );
     }
   }
+  async createMultipleImages(photos: []) {
+    return await Promise.all(
+      photos.map(async (image) => {
+        return await this.createImage(image);
+      })
+    );
+  }
 }

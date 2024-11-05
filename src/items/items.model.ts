@@ -4,30 +4,25 @@ import {
   DataType,
   Table,
   Model,
-  BelongsTo,
   ForeignKey,
-  HasMany,
+  BelongsTo,
 } from "sequelize-typescript";
 import { Category } from "src/categories/categories.model";
-import { Review } from "src/reviews/reviews.model";
 
 interface ItemCreationAttrs {
   article: string;
-
   description: string;
-
   price: number;
-
-  photos: string[];
-
+  salePrice?: number;
   categoryId: number;
+  photos: string[];
 }
 
 @Table({ tableName: "items" })
 export class Item extends Model<Item, ItemCreationAttrs> {
   @ApiProperty({
-    example: 1567,
-    description: "ID товара",
+    example: 1,
+    description: "Уникальный идентификатор товара",
   })
   @Column({
     type: DataType.INTEGER,
@@ -38,18 +33,17 @@ export class Item extends Model<Item, ItemCreationAttrs> {
   id: number;
 
   @ApiProperty({
-    example: "Товар",
+    example: "Название товара",
     description: "Название товара",
   })
   @Column({
     type: DataType.STRING,
-    unique: true,
     allowNull: false,
   })
   article: string;
 
   @ApiProperty({
-    example: "Товар предназначен для местного использования",
+    example: "Описание товара",
     description: "Описание товара",
   })
   @Column({
@@ -59,49 +53,47 @@ export class Item extends Model<Item, ItemCreationAttrs> {
   description: string;
 
   @ApiProperty({
-    example: 3000,
-    description: "Цена",
+    example: 1000,
+    description: "Цена товара",
   })
   @Column({
     type: DataType.INTEGER,
+    allowNull: false,
   })
   price: number;
 
   @ApiProperty({
-    example: true,
-    description: "Включена ли скидка",
-  })
-  @Column({
-    type: DataType.BOOLEAN,
-  })
-  isSaleEnabled: boolean;
-
-  @ApiProperty({
-    example: 2700,
-    description: "Цена после скидки",
+    example: 800,
+    description: "Цена со скидкой (если имеется)",
+    nullable: true,
   })
   @Column({
     type: DataType.INTEGER,
+    allowNull: true,
   })
   salePrice: number;
 
   @ApiProperty({
-    example: ["static/photo1.jpg", "static/photo2.jpg"],
-    description: "Фотографии товара",
+    example: ["photo1.jpg", "photo2.jpg"],
+    description: "Список путей к фотографиям товара",
     type: [String],
   })
   @Column({
-    type: DataType.ARRAY(DataType.TEXT),
+    type: DataType.ARRAY(DataType.STRING),
     allowNull: true,
   })
   photos: string[];
 
-  @HasMany(() => Review)
-  reviews: Review[];
-
   @ForeignKey(() => Category)
-  @Column({ type: DataType.INTEGER })
-  categoryID: number;
+  @ApiProperty({
+    example: 2,
+    description: "ID категории товара",
+  })
+  @Column({
+    type: DataType.INTEGER,
+    allowNull: false,
+  })
+  categoryId: number;
 
   @BelongsTo(() => Category)
   category: Category;

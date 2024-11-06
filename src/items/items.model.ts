@@ -6,6 +6,7 @@ import {
   Model,
   ForeignKey,
   BelongsTo,
+  Default,
 } from "sequelize-typescript";
 import { Category } from "src/categories/categories.model";
 
@@ -97,4 +98,16 @@ export class Item extends Model<Item, ItemCreationAttrs> {
 
   @BelongsTo(() => Category)
   category: Category;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+  })
+  outOfStock: boolean;
+
+  @Column({
+    type: DataType.BOOLEAN,
+    defaultValue: false,
+  })
+  hideFromUser: boolean;
 }

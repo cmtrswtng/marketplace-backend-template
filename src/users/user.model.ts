@@ -11,6 +11,8 @@ import { Item } from "src/items/items.model";
 import { Review } from "src/reviews/reviews.model";
 import { Role } from "src/roles/roles.model";
 import { UserRoles } from "src/roles/user.roles.model";
+import { UserCart } from "./cart/user.cart.model";
+import { UserFavourite } from "./favourite/user.favourite";
 
 interface UserCreationAttrs {
   phone: string;
@@ -60,23 +62,17 @@ export class User extends Model<User, UserCreationAttrs> {
   })
   roles: Role[];
 
+  @BelongsToMany(() => Item, () => UserCart)
   @ApiProperty({
-    description: "Корзина пользователя с товарами",
+    description: "Корзина пользователя",
     type: () => [Item],
-  })
-  @Column({
-    type: DataType.ARRAY(DataType.JSON),
-    allowNull: true,
   })
   cart: Item[];
 
+  @BelongsToMany(() => Item, () => UserFavourite)
   @ApiProperty({
-    description: "Избранные товары пользователя",
+    description: "Избранное пользователя",
     type: () => [Item],
   })
-  @Column({
-    type: DataType.ARRAY(DataType.JSON),
-    allowNull: true,
-  })
-  favorites: Item[];
+  favourite: Item[];
 }

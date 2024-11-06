@@ -42,10 +42,10 @@ export class ReviewsService {
     }
     const images = photos
       ? await this.imageService.createMultipleImages(photos)
-      : null;
+      : [];
     const review = await this.reviewRepository.create({
       ...dto,
-      photos: images || [],
+      photos: images,
     });
     return review;
   }

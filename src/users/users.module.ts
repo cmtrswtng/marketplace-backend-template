@@ -9,14 +9,30 @@ import { RolesModule } from "src/roles/roles.module";
 import { AuthModule } from "src/auth/auth.module";
 import { Review } from "src/reviews/reviews.model";
 import { Item } from "src/items/items.model";
+import { UserCart } from "./cart/user.cart.model";
+import { CartService } from "./cart/cart.service";
+import { FavouriteService } from "./favourite/favourite.service";
+import { UserFavourite } from "./favourite/user.favourite";
+import { OrdersModule } from "src/orders/orders.module";
+import { Order } from "src/orders/orders.model";
 
 @Module({
   controllers: [UsersController],
-  providers: [UsersService],
+  providers: [UsersService, CartService, FavouriteService],
   imports: [
-    SequelizeModule.forFeature([User, Role, UserRoles, Review, Item]),
+    SequelizeModule.forFeature([
+      User,
+      Role,
+      UserRoles,
+      Review,
+      Item,
+      UserCart,
+      UserFavourite,
+      Order
+    ]),
     RolesModule,
     AuthModule,
+    OrdersModule,
   ],
   exports: [UsersService],
 })

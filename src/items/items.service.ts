@@ -13,6 +13,7 @@ import {
   alreadyExistMessage,
   doesNotExistMessage,
 } from "src/constants/messages";
+import { UpdateItemDTO } from "./dto/update.item.dto";
 
 @Injectable()
 export class ItemsService {
@@ -38,6 +39,23 @@ export class ItemsService {
       ...dto,
       photos: images,
     });
+    return item;
+  }
+
+  async updateItem(itemId: number, dto: UpdateItemDTO, photos: []) {
+    const item = await this.getItemByPK(itemId);
+    if (!item) {
+      throw new NotFoundException(doesNotExistMessage("Товар"));
+    }
+    if (photos) {
+      const images = await this.imageService.createMultipleImages(photos);
+      const itemUpdated = await item.update({
+        ...dto,
+        photos: images,
+      });
+      return itemUpdated;
+    }
+    await item.update(dto);
     return item;
   }
 

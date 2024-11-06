@@ -1,4 +1,4 @@
-import { IsNumber, IsString } from "class-validator";
+import { IsNotEmpty, IsNumber, IsString } from "class-validator";
 import { isNumberMessage, isStringMessage } from "src/constants/messages";
 
 export class CreateItemDTO {
@@ -14,5 +14,6 @@ export class CreateItemDTO {
   @IsNumber({}, isNumberMessage)
   readonly categoryId: number;
 
+  @IsNotEmpty({ message: "Не должно быть пустым" })
   readonly photos: [];
 }

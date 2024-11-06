@@ -18,6 +18,10 @@ import { Review } from "./reviews/reviews.model";
 import { ImagesModule } from "./images/images.module";
 import { ServeStaticModule } from "@nestjs/serve-static";
 import * as path from "path";
+import { UserCart } from "./users/cart/user.cart.model";
+import { UserFavourite } from "./users/favourite/user.favourite";
+import { OrdersModule } from './orders/orders.module';
+import { StatusesModule } from './orders/statuses/statuses.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -36,7 +40,16 @@ import * as path from "path";
       autoLoadModels: true,
       synchronize: false,
       sync: { alter: process.env.NODE_ENV === "development" },
-      models: [User, Role, UserRoles, Item, Category, Review],
+      models: [
+        User,
+        Role,
+        UserRoles,
+        Item,
+        Category,
+        Review,
+        UserCart,
+        UserFavourite,
+      ],
     }),
     UsersModule,
     ItemsModule,
@@ -45,6 +58,8 @@ import * as path from "path";
     AuthModule,
     CategoriesModule,
     ImagesModule,
+    OrdersModule,
+    StatusesModule,
   ],
 })
 export class AppModule {}

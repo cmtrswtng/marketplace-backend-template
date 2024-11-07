@@ -20,8 +20,8 @@ import { ServeStaticModule } from "@nestjs/serve-static";
 import * as path from "path";
 import { UserCart } from "./users/cart/user.cart.model";
 import { UserFavourite } from "./users/favourite/user.favourite";
-import { OrdersModule } from './orders/orders.module';
-import { StatusesModule } from './orders/statuses/statuses.module';
+import { OrdersModule } from "./orders/orders.module";
+import { StatusesModule } from "./orders/statuses/statuses.module";
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -38,8 +38,8 @@ import { StatusesModule } from './orders/statuses/statuses.module';
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DB,
       autoLoadModels: true,
-      synchronize: false,
-      sync: { alter: process.env.NODE_ENV === "development" },
+      synchronize: process.env.NODE_ENV === "production",
+      sync: { alter: true },
       models: [
         User,
         Role,
